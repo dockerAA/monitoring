@@ -1,11 +1,25 @@
-version: '3'
+version: '3.4'
+
+volumes:
+  portainer-data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=172.16.18.11,rw
+      device: ":/docker01_mcA/docker/volumes/monitoring/portainer-data"
 
 services:
 
   portainer:
     image: portainer/portainer
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      #nfs volumes
+      - type: volume
+        source: portainer-data
+        target: /data
+        volume:
+           nocopy: true
     ports:
       - 9090:9000
     deploy:
@@ -16,7 +30,7 @@ services:
   viz:
     image: dockersamples/visualizer
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 9080:8080
     deploy:
