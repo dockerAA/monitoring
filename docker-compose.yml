@@ -32,7 +32,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - 9080:8080
+      - 9089:8080
     deploy:
       placement:
         constraints: [node.role == manager]
